@@ -67,7 +67,7 @@ function App() {
     <div>
       <FeedbackForm onChange={(e) => setUserFeedback(e.target.value)} inputBoxValue={userFeedback} usernameBoxValue={username} onChangeName={(e) => setUsername(e.target.value)} onClick={submitFunction} loading={loading} question={"How are you today?"} />
       <h2 className='text-2xl font-semibold p-2 my-4 text-center'>Recent Feedbacks</h2>
-      <div className='border-2 border-gray-700 w-2/3 mx-auto min-h-56'>
+      <div className='border-2 border-gray-700 w-2/3 mx-auto min-h-56 max-h-70 overflow-auto'>
         <Table TableContent={feedbacks || []} />
       </div>
     </div>

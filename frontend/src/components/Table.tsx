@@ -27,13 +27,13 @@ const Table: React.FC<TableProps> = ({ TableContent }) => {
   }
 
   return (
-    <div className="relative overflow-x-auto">
+    <div className="relative overflow-auto">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead className="text-xs text-gray-700 uppercase border-black border-2 bg-slate-200">
           <tr>
             <th scope="col" className="px-6 py-3 text-center">
               Name
-            </th>
+            </th> 
             <th scope="col" className="px-6 py-3 text-center">
               Feedback
             </th>
@@ -42,7 +42,7 @@ const Table: React.FC<TableProps> = ({ TableContent }) => {
             </th>
           </tr>
         </thead>
-        <tbody className="overflow-auto">
+        <tbody>
           {TableContent.map((content: TableContentInterface, i) => (
             <tr key={i} className="bg-white border-b border-2 border-gray-200">
               <th
