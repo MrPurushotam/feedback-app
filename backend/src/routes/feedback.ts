@@ -1,6 +1,18 @@
 import { Router } from "express";
+import rateLimit from "express-rate-limit"
 
 const router = Router()
+
+
+const limiter=rateLimit({
+    windowMs:10*1000,
+    max:1,
+    message:{
+        error:"Too many requests sent, Please try again later."
+    },
+    standardHeaders:true,
+    legacyHeaders:false
+})
 
 interface memory {
     name: string,
@@ -10,7 +22,7 @@ interface memory {
 
 const MemoryStorage: memory[] = []
 
-router.post("/review", (req, res) => {
+router.post("/review",limiter, (req, res) => {
     try {
         const object = req.body
         if (!object.feedback || !object.name) {
@@ -33,8 +45,8 @@ router.get("/review/:range/:start?/:end?", (req, res) => {
             data = MemoryStorage
             return res.json({ message: `Feedback list generated.`, feedbacks: data, success: true })
         } else if (range === "specific") {
-            const start: number = Number(req.params.start ? req.params.start : 0)
-            const end: number = Number(req.params.end ? req.params.end : 10)
+            const start: number = Number(req.params.start) || 0
+            const end: number = Number(req.params.end) || 10
             data = MemoryStorage.slice(start, end)
             return res.json({ message: `Feedback generated from ${start + "-" + end} `, feedbacks: data, success: true })
         } else {

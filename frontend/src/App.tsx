@@ -3,13 +3,15 @@ import './App.css'
 import FeedbackForm from './components/FeedbackForm'
 import Table from './components/Table'
 import axios from 'axios'
+import toast, { toastConfig } from 'react-simple-toasts';
+import 'react-simple-toasts/dist/theme/light.css';
 
 interface Feedback {
   name: string;
   feedback: string;
   time: Date;
 }
-
+toastConfig({theme:'light',clickClosable:true,position:'top-right',duration:4000})
 function App() {
   const [feedbacks, setFeedbacks] = useState<Feedback[] | null>(null)
   const fetch = useRef(true)
@@ -23,11 +25,17 @@ function App() {
     async function getData() {
       try {
         const resp = await axios.get(`http://localhost:4000/api/v1/feedback/review/specific/${start.current}/${end.current}`)
-        setFeedbacks((prev) => prev ? [...prev, ...resp.data.feedbacks] : resp.data.feedbacks);
-        fetch.current = false
+        if(resp.data.success){
+          fetch.current = false
+          setFeedbacks((prev) => prev ? [...prev, ...resp.data.feedbacks] : resp.data.feedbacks);
+          toast(resp.data.message)
+        }else{
+          toast(resp.data.message)
+        }
         // eslint-disable-next-line 
       } catch (error: any) {
         console.log("Error: ", error.message)
+        toast(error.message)
       }
     }
     if(fetch.current){
@@ -44,9 +52,14 @@ function App() {
         feedback: userFeedback
       })
       console.log(resp.data)
+      if(resp.data.success){
+        setUserFeedback(null)
+        toast(resp.data.message)
+      }
       // eslint-disable-next-line 
     } catch (error:any) {
       console.log("Error: ",error.message)
+      toast(error.message)
     }
     setLoading(false)
   }
