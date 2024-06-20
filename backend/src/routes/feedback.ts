@@ -46,7 +46,7 @@ router.get("/review/:range/:start?/:end?", (req, res) => {
             return res.json({ message: `Feedback list generated.`, feedbacks: data, success: true })
         } else if (range === "specific") {
             const start: number = Number(req.params.start) || 0
-            const end: number = Number(req.params.end) || 10
+            const end: number = Number(req.params.end)>MemoryStorage.length?MemoryStorage.length:Number(req.params.end) || 10
             data = MemoryStorage.slice(start, end)
             return res.json({ message: `Feedback generated from ${start + "-" + end} `, feedbacks: data, success: true })
         } else {
